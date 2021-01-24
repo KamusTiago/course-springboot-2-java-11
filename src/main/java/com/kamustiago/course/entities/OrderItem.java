@@ -1,11 +1,15 @@
 package com.kamustiago.course.entities;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.kamustiago.course.entities.pk.OrderItemPK;
 
 // Mapeamento
@@ -15,10 +19,15 @@ public class OrderItem implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	// Mapeamento em ID COMPOSTO
+	// Sempre quando criar uma classe auxiliar com ID COMPOSTO, TEM QUE INSTANCIAR ELA
 	@EmbeddedId
-	private OrderItemPK id;
+	private OrderItemPK id= new OrderItemPK(); 
+	
 	private Integer quantity;
 	private Double price;
+	
+	@OneToMany
+	private Set<OrderItem> itens = new HashSet<>();
 
 	public OrderItem() {
 	}
@@ -30,6 +39,7 @@ public class OrderItem implements Serializable {
 		this.price = price;
 	}
 
+	@JsonIgnore
 	public Order getOrder() {
 		return id.getOrder();
 	}
