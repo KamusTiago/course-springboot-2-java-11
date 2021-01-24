@@ -27,9 +27,24 @@ public class UserService {
 	public User insert(User obj) {
 		return repository.save(obj);
 	}
-	
+
 	public void delet(Long id) {
 		repository.deleteById(id);
+	}
+
+	// o getOne apenas prepara o obj para realizar uma operacao, ele nao traz
+	// diretamente do banco
+	public User update(Long id, User obj) {
+		User entity = repository.getOne(id);
+		updateData(entity, obj);
+		return repository.save(entity);
+	}
+
+	private void updateData(User entity, User obj) {
+		entity.setName(obj.getName());
+		entity.setEmail(obj.getEmail());
+		entity.setPhone(obj.getPhone());
+		
 	}
 
 }
