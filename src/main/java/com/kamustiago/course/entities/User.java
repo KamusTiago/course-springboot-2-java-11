@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 //se utiliza o Serializible para transformar os objetos 
 //em cadeia de bytes para que trafeguem na rede ou gravados em arquivos. "implements Serializable"
 @Entity
@@ -26,6 +28,7 @@ public class User implements Serializable{
 	private String phone;
 	private String passWord;
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "client")
 	private List<Order> orders = new ArrayList<>();
 	
