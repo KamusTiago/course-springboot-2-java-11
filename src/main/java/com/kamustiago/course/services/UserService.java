@@ -3,10 +3,13 @@ package com.kamustiago.course.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.kamustiago.course.entities.User;
 import com.kamustiago.course.repositories.UserRepository;
+import com.kamustiago.course.services.exceptions.DatabaseException;
 import com.kamustiago.course.services.exceptions.ResourceNotFoundException;
 
 //Registrando a classe como componente do spring
@@ -30,7 +33,13 @@ public class UserService {
 	}
 
 	public void delet(Long id) {
+		try {
 		repository.deleteById(id);
+		}catch(EmptyResultDataAccessException e) {
+			throw new ResourceNotFoundException(id);
+		}catch(DataIntegrityViolationException e) {
+			throw new DatabaseException(e.getMessage());
+		}
 	}
 
 	// o getOne apenas prepara o obj para realizar uma operacao, ele nao traz
