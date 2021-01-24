@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.kamustiago.course.entities.User;
 import com.kamustiago.course.repositories.UserRepository;
+import com.kamustiago.course.services.exceptions.ResourceNotFoundException;
 
 //Registrando a classe como componente do spring
 @Service
@@ -21,7 +22,7 @@ public class UserService {
 
 	public User findById(Long id) {
 		java.util.Optional<User> obj = repository.findById(id);
-		return obj.get();
+		return obj.orElseThrow(()-> new ResourceNotFoundException(id));
 	}
 
 	public User insert(User obj) {
