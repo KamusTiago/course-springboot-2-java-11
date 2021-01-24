@@ -2,6 +2,8 @@ package com.kamustiago.course.services;
 
 import java.util.List;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -44,10 +46,14 @@ public class UserService {
 
 	// o getOne apenas prepara o obj para realizar uma operacao, ele nao traz
 	// diretamente do banco
-	public User update(Long id, User obj) {
-		User entity = repository.getOne(id);
+	public User update(Long id, User obj) {		
+		try{
+			User entity = repository.getOne(id);
 		updateData(entity, obj);
 		return repository.save(entity);
+		}catch (EntityNotFoundException e) {
+			throw new ResourceNotFoundException(id);
+		}
 	}
 
 	private void updateData(User entity, User obj) {
